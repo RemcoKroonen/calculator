@@ -14,7 +14,7 @@ document.getElementById("acht").setAttribute("onClick", "javascript:getal('8');"
 document.getElementById("negen").setAttribute("onClick", "javascript:getal('9');");
 document.getElementById("nul").setAttribute("onClick", "javascript:getal('0');");
 document.getElementById("punt").setAttribute("onClick", "javascript:getal('.');");
-document.getElementById("is").setAttribute("onClick", "javascript:bewerking('=');");
+document.getElementById("is").setAttribute("onClick", "javascript:resultaat('=');");
 document.getElementById("keer").setAttribute("onClick", "javascript:bewerking('x');");
 document.getElementById("plus").setAttribute("onClick", "javascript:bewerking('+');");
 document.getElementById("min").setAttribute("onClick", "javascript:bewerking('-');");
@@ -42,4 +42,10 @@ function reset(){
 	somarrayteller = 0;
 	document.getElementById("som").setAttribute("value", somstring);
 	document.getElementById("resultaat").setAttribute("value", somstring);
+}
+function resultaat(){
+	bewerking('');
+	for (somarrayteller =  0; somarrayteller <somarray.length; somarrayteller++ ) {
+		alert(somarray[somarrayteller])
+	}
 }
