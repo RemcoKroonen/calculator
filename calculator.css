@@ -1,11 +1,12 @@
 body {
-	
+	background-color: #2A3132;
 }
 
 button{
 	width: 45px;
 	height: 45px;
-
+	background-color: #505160;
+	
 }
 #een{
 	position: absolute;

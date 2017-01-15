@@ -2,6 +2,9 @@ var somstring = "";
 var getalstring = "";
 var somarrayteller = 0;
 var somarray = [];
+var isingedrukt = false;
+var vorigeuitkomst = "";
+var reservesomarray = [];
 
 document.getElementById("een").setAttribute("onClick", "javascript:getal('1');");
 document.getElementById("twee").setAttribute("onClick", "javascript:getal('2');");
@@ -22,14 +25,28 @@ document.getElementById("gedeeld").setAttribute("onClick", "javascript:bewerking
 document.getElementById("c").setAttribute("onClick", "javascript:reset();");
 
 function getal(cijfer){
+	if (isingedrukt){
+		reset();
+		isingedrukt = false;
+	};
 	getalstring = getalstring+cijfer;
 	somstring = somstring+cijfer;
 	document.getElementById("som").setAttribute("value", somstring);
 }
 function bewerking(teken){
+	if (isingedrukt){
+		vorigeuitkomst = document.getElementById("resultaat").getAttribute("value");
+		reset();
+		isingedrukt = false;
+		somarray[somarrayteller]=vorigeuitkomst;
+		somarrayteller +=1;
+		somstring = vorigeuitkomst;
+		document.getElementById("som").setAttribute("value", somstring);
+	};
 	somstring = somstring+teken;
+	if (getalstring !="") {
 	somarray[somarrayteller]= getalstring;
-	somarrayteller +=1;
+	somarrayteller +=1;}
 	somarray[somarrayteller]=teken;
 	somarrayteller +=1;
 	getalstring = "";
@@ -40,6 +57,7 @@ function reset(){
 	getalstring= "";
 	somarray= [];
 	somarrayteller = 0;
+	isingedrukt = false;
 	document.getElementById("som").setAttribute("value", somstring);
 	document.getElementById("resultaat").setAttribute("value", somstring);
 }
@@ -80,6 +98,7 @@ function resultaat(){
         rekenplek =somarray.findIndex(zoekmin);  
     }
     document.getElementById("resultaat").setAttribute("value", uitkomst);
+    isingedrukt = true;
 }
 function zoekx(onderdeel){
     return onderdeel == 'x';
