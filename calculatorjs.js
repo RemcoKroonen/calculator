@@ -5,6 +5,8 @@ var somarray = [];
 var isingedrukt = false;
 var vorigeuitkomst = "";
 var reservesomarray = [];
+var keerofdelen = false;
+var keerofdelenuitkomst = 0;
 
 document.getElementById("een").setAttribute("onClick", "javascript:getal('1');");
 document.getElementById("twee").setAttribute("onClick", "javascript:getal('2');");
@@ -24,91 +26,139 @@ document.getElementById("min").setAttribute("onClick", "javascript:bewerking('-'
 document.getElementById("gedeeld").setAttribute("onClick", "javascript:bewerking('/');");
 document.getElementById("c").setAttribute("onClick", "javascript:reset();");
 
-function getal(cijfer){
-	if (isingedrukt){
-		reset();
-		isingedrukt = false;
-	};
-	getalstring = getalstring+cijfer;
-	somstring = somstring+cijfer;
-	document.getElementById("som").setAttribute("value", somstring);
+function getal(cijfer) {
+    if (isingedrukt) {
+        reset();
+        isingedrukt = false;
+    };
+    getalstring = getalstring + cijfer;
+    somstring = somstring + cijfer;
+    document.getElementById("som").setAttribute("value", somstring);
 }
-function bewerking(teken){
-	if (isingedrukt){
-		vorigeuitkomst = document.getElementById("resultaat").getAttribute("value");
-		reset();
-		isingedrukt = false;
-		somarray[somarrayteller]=vorigeuitkomst;
-		somarrayteller +=1;
-		somstring = vorigeuitkomst;
-		document.getElementById("som").setAttribute("value", somstring);
-	};
-	somstring = somstring+teken;
-	if (getalstring !="") {
-	somarray[somarrayteller]= getalstring;
-	somarrayteller +=1;}
-	somarray[somarrayteller]=teken;
-	somarrayteller +=1;
-	getalstring = "";
-	document.getElementById("som").setAttribute("value", somstring);
+
+function bewerking(teken) {
+    if (isingedrukt) {
+        vorigeuitkomst = document.getElementById("resultaat").getAttribute("value");
+        reset();
+        isingedrukt = false;
+        somarray[somarrayteller] = vorigeuitkomst;
+        somarrayteller += 1;
+        somarray[somarrayteller] = teken;
+        somarrayteller += 1;
+        somstring = vorigeuitkomst;
+        document.getElementById("som").setAttribute("value", somstring);
+    };
+    somstring = somstring + teken;
+    if (getalstring != "") {
+        somarray[somarrayteller] = getalstring;
+        somarrayteller += 1;
+        tussenresultaat(teken);
+        somarray[somarrayteller] = teken;
+        somarrayteller += 1;
+        getalstring = "";
+        document.getElementById("som").setAttribute("value", somstring);
+    }
 }
-function reset(){
-	somstring = "";
-	getalstring= "";
-	somarray= [];
-	somarrayteller = 0;
-	isingedrukt = false;
-	document.getElementById("som").setAttribute("value", somstring);
-	document.getElementById("resultaat").setAttribute("value", somstring);
+
+function reset() {
+    somstring = "";
+    getalstring = "";
+    somarray = [];
+    somarrayteller = 0;
+    isingedrukt = false;
+    keerofdelen = false; 
+    keerofdelenuitkomst = 0;
+    document.getElementById("som").setAttribute("value", somstring);
+    document.getElementById("resultaat").setAttribute("value", somstring);
 }
-function resultaat(){
+function resultaat(teken) {
     var rekenplek = 0;
     var uitkomst = 0;
-    bewerking('');
+    var berekening = false;
+    if(teken!='T'){
+        bewerking('');
+    }
     /*for (somarrayteller =  0; somarrayteller <somarray.length; somarrayteller++ ) {
-        alert(somarray[somarrayteller])
+    alert(somarray[somarrayteller])
     }*/
     debugger;
-    rekenplek =somarray.findIndex(zoekx);
-    while (rekenplek >= 0){
-        uitkomst = parseFloat(somarray[rekenplek-1]) * parseFloat(somarray[rekenplek+1]);
-        somarray[rekenplek-1] = uitkomst.toString();
-        somarray.splice(rekenplek,2);
-        rekenplek =somarray.findIndex(zoekx);  
+    
+    console.log(somarray);
+
+    rekenplek = somarray.findIndex(zoekx);
+    while (rekenplek >= 0) {
+        uitkomst = parseFloat(somarray[rekenplek - 1]) * parseFloat(somarray[rekenplek + 1]);
+        somarray[rekenplek - 1] = uitkomst.toString();
+        somarray.splice(rekenplek, 2);
+        rekenplek = somarray.findIndex(zoekx);
+        berekening = true;
     }
-    rekenplek =somarray.findIndex(zoekgedeeld);
-    while (rekenplek >= 0){
-        uitkomst = parseFloat(somarray[rekenplek-1]) / parseFloat(somarray[rekenplek+1]);
-        somarray[rekenplek-1] = uitkomst.toString();
-        somarray.splice(rekenplek,2);
-        rekenplek =somarray.findIndex(zoekgedeeld);  
+    rekenplek = somarray.findIndex(zoekgedeeld);
+    while (rekenplek >= 0) {
+        uitkomst = parseFloat(somarray[rekenplek - 1]) / parseFloat(somarray[rekenplek + 1]);
+        somarray[rekenplek - 1] = uitkomst.toString();
+        somarray.splice(rekenplek, 2);
+        rekenplek = somarray.findIndex(zoekgedeeld);
+        berekening = true;
     }
-    rekenplek =somarray.findIndex(zoekplus);
-    while (rekenplek >= 0){
-        uitkomst = parseFloat(somarray[rekenplek-1]) + parseFloat(somarray[rekenplek+1]);
-        somarray[rekenplek-1] = uitkomst.toString();
-        somarray.splice(rekenplek,2);
-        rekenplek =somarray.findIndex(zoekplus);  
+    rekenplek = somarray.findIndex(zoekplus);
+    while (rekenplek >= 0) {
+        uitkomst = parseFloat(somarray[rekenplek - 1]) + parseFloat(somarray[rekenplek + 1]);
+        somarray[rekenplek - 1] = uitkomst.toString();
+        somarray.splice(rekenplek, 2);
+        rekenplek = somarray.findIndex(zoekplus);
+        berekening = true;
     }
-    rekenplek =somarray.findIndex(zoekmin);
-    while (rekenplek >= 0){
-        uitkomst = parseFloat(somarray[rekenplek-1]) - parseFloat(somarray[rekenplek+1]);
-        somarray[rekenplek-1] = uitkomst.toString();
-        somarray.splice(rekenplek,2);
-        rekenplek =somarray.findIndex(zoekmin);  
+    rekenplek = somarray.findIndex(zoekmin);
+    while (rekenplek >= 0) {
+        uitkomst = parseFloat(somarray[rekenplek - 1]) - parseFloat(somarray[rekenplek + 1]);
+        somarray[rekenplek - 1] = uitkomst.toString();
+        somarray.splice(rekenplek, 2);
+        rekenplek = somarray.findIndex(zoekmin);
+        berekening = true;
     }
-    document.getElementById("resultaat").setAttribute("value", uitkomst);
-    isingedrukt = true;
+    if(berekening){
+        document.getElementById("resultaat").setAttribute("value", uitkomst);
+    }
+    else{
+        document.getElementById("resultaat").setAttribute("value", somarray[0]);
+    }
+    if (teken == '='){
+        isingedrukt = true;
+    };
 }
-function zoekx(onderdeel){
+
+function zoekx(onderdeel) {
     return onderdeel == 'x';
 }
-function zoekgedeeld(onderdeel){
+function zoekgedeeld(onderdeel) {
     return onderdeel == '/';
 }
-function zoekplus(onderdeel){
+function zoekplus(onderdeel) {
     return onderdeel == '+';
 }
-function zoekmin(onderdeel){
+function zoekmin(onderdeel) {
     return onderdeel == '-';
+}
+function tussenresultaat(teken) {
+    reservesomarray = somarray.slice();
+    if((teken == '+') || (teken == '-')){
+        resultaat('T');
+    }
+    else {
+        if(keerofdelen){
+            if(teken=='x'){
+                keerofdelenuitkomst = keerofdelenuitkomst * parseFloat(getalstring);
+            }
+            else{
+                keerofdelenuitkomst = keerofdelenuitkomst / parseFloat(getalstring);
+            }
+        }
+        else {
+            keerofdelenuitkomst = parseFloat(getalstring);
+            keerofdelen = true;
+        }
+        document.getElementById("resultaat").setAttribute("value", keerofdelenuitkomst);
+    }
+    somarray = reservesomarray.slice();
 }
